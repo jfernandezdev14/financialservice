@@ -12,6 +12,9 @@ db.createUser(
             ]
         }
 );
-db.createCollection('accounts', { capped : true, size : 5242880, max : 5000 } );
-db.createCollection('transactions', { capped : true, size : 5242880, max : 5000 } );
+db.createCollection('accounts');
+db.createCollection('transactions');
+db.accounts.insert({"user_id": "105398891", "balance": 0})
+db.accounts.insert({"user_id": "105398892", "balance": 100000})
+db.accounts.insert({"user_id": "105398893", "balance": 0})
 print('END #################################################################');

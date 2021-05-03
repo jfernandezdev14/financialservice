@@ -1,9 +1,17 @@
-from flask import Flask
-from flask_pymongo import PyMongo
+#!flask/bin/python
+from flask_restful import Api
 
-app = Flask(__name__)
-app.config["MONGO_URI"] = "mongodb://localhost/financialservice"
-mongo = PyMongo(app)
+from app import app
+from app.resources.accounts_resources import AccountsResource
+
+financialservice_api = Api(app)
+
+# List of Endpoints
+
+financialservice_api.add_resource(
+    AccountsResource,
+    '/financialservice/api/v1.0/accounts'
+)
 
 if __name__ == "__main__":
-    app.run(debug=True, host="0.0.0.0", port=8000)
+    app.run(debug=True, host="0.0.0.0", port=8001)
