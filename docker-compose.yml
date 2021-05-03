@@ -5,19 +5,23 @@
       build:
         context: .
         dockerfile: Dockerfile
+      networks:
+        - financialservice_network
       environment:
-        - MONGO_URI=mongodb://api_user:api_pwd@mongodb:27020/financialservice
+        - MONGO_URI=mongodb://api_user:api_pwd@mongo:27017/financialservice
       command: "python run.py runserver 0.0.0.0:8001"
       ports:
         - 8001:8001
       volumes:
         - .:/app
       depends_on:
-        - mongodb
+        - mongo
 
-    mongodb:
+    mongo:
       container_name: financialservice_db
       image: mongo:latest
+      networks:
+        - financialservice_network
       restart: always
       environment:
         - MONGO_INITDB_DATABASE=financialservice
@@ -29,3 +33,8 @@
 
       ports:
         - 27020:27017
+
+  networks:
+    financialservice_network:
+      name: financialservice_default
+      driver: bridge
