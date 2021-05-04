@@ -1,0 +1,40 @@
+  version: "3.8"
+  services:
+    backend:
+      container_name: financialservice_backend
+      build:
+        context: .
+        dockerfile: Dockerfile
+      networks:
+        - financialservice_network
+      environment:
+        - MONGO_URI=mongodb://api_user:api_pwd@mongo:27017/financialservice
+      command: "python run.py runserver 0.0.0.0:8001"
+      ports:
+        - 8001:8001
+      volumes:
+        - .:/app
+      depends_on:
+        - mongo
+
+    mongo:
+      container_name: financialservice_db
+      image: mongo:latest
+      networks:
+        - financialservice_network
+      restart: always
+      environment:
+        - MONGO_INITDB_DATABASE=financialservice
+        - MONGO_INITDB_ROOT_USERNAME=admin
+        - MONGO_INITDB_ROOT_PASSWORD=password
+      volumes:
+        - ./mongodb/data:/data/db
+        - ./mongodb/init-db/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+
+      ports:
+        - 27020:27017
+
+  networks:
+    financialservice_network:
+      name: financialservice_default
+      driver: bridge
