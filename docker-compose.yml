@@ -1,12 +1,13 @@
   version: "3.8"
   services:
-    backend:
-      container_name: financialservice_backend
+    fs_backend:
+      container_name: financialservice
       build:
         context: .
         dockerfile: Dockerfile
       networks:
         - financialservice_network
+        - acmebankportal_network
       environment:
         - MONGO_URI=mongodb://api_user:api_pwd@mongo:27017/financialservice
       command: "python run.py runserver 0.0.0.0:8001"
@@ -37,4 +38,7 @@
   networks:
     financialservice_network:
       name: financialservice_default
+      driver: bridge
+    acmebankportal_network:
+      name: acmebankportal_default
       driver: bridge
